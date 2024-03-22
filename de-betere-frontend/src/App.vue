@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+import router from './router';
+import LocationView from './views/LocationView.vue';
+
+router.push(LocationView);
 </script>
 
 <template>

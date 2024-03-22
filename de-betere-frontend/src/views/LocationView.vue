@@ -13,12 +13,7 @@
         <h2>Plaats:</h2>
         <div class="dropdown">
           <select id="plaatsDropdown">
-            <option value="Verdieping 1">Verdieping 1</option>
-            <option value="Verdieping 2">Verdieping 2</option>
-            <option value="Verdieping 3">Verdieping 3</option>
-            <option value="Verdieping 4">Verdieping 4</option>
-            <option value="Verdieping 5">Verdieping 5</option>
-            <option value="Verdieping 6">Verdieping 6</option>
+            <option v-for="item in ApiData" value={{item.id}}>{{item.name}}</option>
           </select>
         </div>
       </div> 
@@ -35,11 +30,16 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   data() {
     return {
-      isLocationOn: false
+      isLocationOn: false,
+      ApiData: [],
     };
+  },
+  mounted() {
+    this.fetchDataFromAPI();
   },
   methods: {
     toggleLocation() {
@@ -53,8 +53,21 @@ export default {
     logDropdownValue() {
       const selectedValue = document.getElementById('plaatsDropdown').value;
       console.log('Selected value:', selectedValue);
-    }
+    },
+    fetchDataFromAPI() {
+      const apiUrl = 'http://localhost:5000/v1/location'; // Replace with your API endpoint URL
+      axios.get(apiUrl)
+        .then((response) => {
+          this.ApiData = response.data;
+        })
+        .catch((error) => {
+          console.error('Error fetching data:', error);
+        });
+    },
   }
+
+  //api 
+  //api
 };
 </script>
 
