@@ -13,7 +13,7 @@
         <h2>Plaats:</h2>
         <div class="dropdown">
           <select id="plaatsDropdown">
-            <option v-for="item in ApiData" value={{item.id}}>{{item.name}}</option>
+            <option v-for="item in ApiData" :value=item.id>{{item.name}}</option>
           </select>
         </div>
       </div> 
@@ -36,12 +36,14 @@ export default {
     return {
       isLocationOn: false,
       ApiData: [],
+      
     };
   },
   mounted() {
-    this.fetchDataFromAPI();
+    this.fetchLocationsFromAPI();
   },
   methods: {
+    
     toggleLocation() {
       console.log("Location switch toggled");
       if (this.isLocationOn) {
@@ -53,10 +55,12 @@ export default {
     logDropdownValue() {
       const selectedValue = document.getElementById('plaatsDropdown').value;
       console.log('Selected value:', selectedValue);
+      this.sendLocationToAPI(1, selectedValue);
     },
-    fetchDataFromAPI() {
-      const apiUrl = 'http://localhost:5000/v1/location'; // Replace with your API endpoint URL
-      axios.get(apiUrl)
+    fetchLocationsFromAPI() {
+      const apiUrl = 'http://localhost:5000'
+      const EndPoint = '/v1/location';
+      axios.get(apiUrl + EndPoint)
         .then((response) => {
           this.ApiData = response.data;
         })
@@ -64,10 +68,15 @@ export default {
           console.error('Error fetching data:', error);
         });
     },
+    sendLocationToAPI(id, locationId){
+      const apiUrl = 'http://localhost:5000'
+      const EndPoint = "/v1/location";
+      axios.put(apiUrl + EndPoint, {id : id, locationId: locationId})
+      .catch((error) => {
+        console.error("Error sending location: " + error.message)})
+    },
   }
 
-  //api 
-  //api
 };
 </script>
 
