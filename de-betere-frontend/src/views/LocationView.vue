@@ -30,29 +30,32 @@
     </div>
   </div>
 
-
-
 </template>
 
 <script>
+var locationFollowing = true;
 export default {
   data() {
-    return {
-      isLocationOn: false
-    };
   },
   methods: {
     toggleLocation() {
       console.log("Location switch toggled");
       if (this.isLocationOn) {
         console.log("Location is ON");
+        locationFollowing = true;
       } else {
         console.log("Location is OFF");
+        locationFollowing = false;
       }
     },
     logDropdownValue() {
-      const selectedValue = document.getElementById('plaatsDropdown').value;
-      console.log('Selected value:', selectedValue);
+
+      if(locationFollowing) {
+        const selectedValue = document.getElementById('plaatsDropdown').value;
+        console.log('Selected value:', selectedValue);
+      } else {
+        console.log('Location is OFF so turn it on');
+      }
     }
   }
 };
