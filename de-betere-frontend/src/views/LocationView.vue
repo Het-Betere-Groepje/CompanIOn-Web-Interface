@@ -25,59 +25,41 @@
     </div>
   </div>
 
+  
+
 
 
 </template>
 
-<script>
-import axios from 'axios';
-export default {
-  data() {
-    return {
-      isLocationOn: false,
-      ApiData: [],
-      
-    };
-  },
-  mounted() {
-    this.fetchLocationsFromAPI();
-  },
-  methods: {
-    
-    toggleLocation() {
-      console.log("Location switch toggled");
-      if (this.isLocationOn) {
-        console.log("Location is ON");
-      } else {
-        console.log("Location is OFF");
-      }
-    },
-    logDropdownValue() {
-      const selectedValue = document.getElementById('plaatsDropdown').value;
-      console.log('Selected value:', selectedValue);
-      this.sendLocationToAPI(1, selectedValue);
-    },
-    fetchLocationsFromAPI() {
-      const apiUrl = 'http://localhost:5000'
-      const EndPoint = '/v1/location';
-      axios.get(apiUrl + EndPoint)
-        .then((response) => {
-          this.ApiData = response.data;
-        })
-        .catch((error) => {
-          console.error('Error fetching data:', error);
-        });
-    },
-    sendLocationToAPI(id, locationId){
-      const apiUrl = 'http://localhost:5000'
-      const EndPoint = "/v1/location";
-      axios.put(apiUrl + EndPoint, {id : id, locationId: locationId})
-      .catch((error) => {
-        console.error("Error sending location: " + error.message)})
-    },
-  }
+<script setup>
+  import { getLocations, sendLocation } from '../api';
 
-};
+  import { ref, onMounted } from 'vue';
+
+  const isLocationOn = ref(false); // bool
+  const ApiData = ref([]); // [array]
+
+  onMounted(() => {
+    getLocations().then((data) => {
+      ApiData.value = data;
+    });
+    
+  });
+
+  const toggleLocation = () => {
+    console.log("Location switch toggled");
+    if (isLocationOn.value) {
+      console.log("Location is ON");
+    } else {
+      console.log("Location is OFF");
+    }
+  };
+
+  const logDropdownValue = () => {
+    const selectedValue = document.getElementById('plaatsDropdown').value;
+    console.log('Selected value:', selectedValue);
+    sendLocation(1, selectedValue);
+  };
 </script>
 
 <style scoped>
@@ -85,8 +67,8 @@ export default {
     position: absolute;
     top: 20%; 
     left: 0; 
-    width: 15%;; 
-    height: 20%;;
+    width: 20%;; 
+    height: 30%;;
     background-color: #383838;
     border-top-right-radius: 50px;
     border-bottom-right-radius: 50px; 
